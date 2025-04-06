@@ -36,6 +36,10 @@ CORS(app)
 model = joblib.load("mood_model.pkl")
 vectorizer = joblib.load("mood_vectorizer.pkl")
 
+@app.route("/", methods=["GET"])
+def home():
+    return "Backend is Alive!", 200
+    
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
@@ -46,6 +50,7 @@ def predict():
     vect = vectorizer.transform([sentence])
     prediction = model.predict(vect)[0]
     return jsonify({"mood": prediction})
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # fallback to 5000 for local testing
